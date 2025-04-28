@@ -3,18 +3,25 @@
 #include <string.h>
 #include <unistd.h>
 
-void clearScreen()
-{
+/*
+Função estética que limpa o terminal (peguei no Stack Overflow).
+*/
+void clearScreen() {
   const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
   write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 11);
 }
 
+/*
+main(): imprime o menu e seleciona as opções.
+*/
 int main(void) {
-
+     // index: seletor de opção.
     int index;
 
+    clearScreen();
+    
+ // do/while(): executa o print do menu enquanto index diferente de 8.
     do {
-        clearScreen();
         printf("Seja bem-vindo ao Serviço de Atendimento de Saúde. \n");
         printf("O que gostaria de fazer hoje? \n");    
         printf("================================================== \n");
@@ -32,9 +39,73 @@ int main(void) {
 
         printf("\nDigite aqui: ");
         scanf("%d", &index);
+
+     // switch(): seleção de opção.
+        switch (index) {
+            case 1: {
+                clearScreen();
+                printf("\nOpção 1 selecionada.\n \n");
+                sleep(1);
+                clearScreen();
+                break;
+            }
+            case 2: {
+                clearScreen();
+                printf("\nOpção 2 selecionada.\n \n");
+                sleep(1);
+                clearScreen();
+                break;
+            }
+            case 3: {
+                clearScreen();
+                printf("\nOpção 3 selecionada.\n \n");
+                sleep(1);
+                clearScreen();
+                break;
+            }
+            case 4: {
+                clearScreen();
+                printf("\nOpção 4 selecionada.\n \n");
+                sleep(1);
+                clearScreen();
+                break;
+            }
+            case 5: {
+                clearScreen();
+                printf("\nOpção 5 selecionada.\n \n");
+                sleep(1);
+                clearScreen();
+                break;
+            }
+            case 6: {
+                clearScreen();
+                printf("\nOpção 6 selecionada.\n \n");
+                sleep(1);
+                clearScreen();
+                break;
+            }
+            case 7: {
+                clearScreen();
+                printf("\nOpção 7 selecionada.\n \n");
+                sleep(1);
+                clearScreen();
+                break;
+            }
+            case 8: {
+                break;
+            }
+            default: {
+                clearScreen();
+                printf("\nOpção inválida.\n \n");
+                sleep(1);
+                clearScreen();
+                break;
+            }
+        };
     }
     while (index != 8);
 
+ // Print quando encerra o programa.
     clearScreen();
     printf("\n Encerrando... \n \n");
     sleep(1);
