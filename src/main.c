@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "include/sobre.h"
+#include "../include/sobre.h"
+#include "../include/cadastro.h"
+#include "../include/clearscreen.h"
 
 /*
 Função de retorno ao menu principal.
@@ -46,8 +48,7 @@ int main(void) {
         switch (index) {
             case 1: {
                 clearScreen();
-                printf("\nOpção 1 selecionada.\n \n");
-                sleep(1);
+                menuitem_cadastro();
                 clearScreen();
                 break;
             }
@@ -98,7 +99,7 @@ int main(void) {
             }
             default: {
                 clearScreen();
-                printf("\nOpção inválida.\n \n");
+                printf("\n404 - Not Found\n \n");
                 sleep(1);
                 clearScreen();
                 break;
