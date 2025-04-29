@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "include/sobre.h"
 
 /*
 Função estética que limpa o terminal (peguei no Stack Overflow).
@@ -12,6 +13,15 @@ void clearScreen() {
 }
 
 /*
+Função de retorno ao menu principal.
+*/
+void voltarMenu(void) {
+    printf("\n Pressione ENTER para voltar ao menu principal. ");
+    getchar();
+    getchar();
+}
+
+/*
 main(): imprime o menu e seleciona as opções.
 */
 int main(void) {
@@ -19,7 +29,7 @@ int main(void) {
     int index;
 
     clearScreen();
-    
+
  // do/while(): executa o print do menu enquanto index diferente de 8.
     do {
         printf("Seja bem-vindo ao Serviço de Atendimento de Saúde. \n");
@@ -86,8 +96,8 @@ int main(void) {
             }
             case 7: {
                 clearScreen();
-                printf("\nOpção 7 selecionada.\n \n");
-                sleep(1);
+                sobre();
+                voltarMenu();
                 clearScreen();
                 break;
             }
