@@ -5,14 +5,6 @@
 #include "include/sobre.h"
 
 /*
-Função estética que limpa o terminal (peguei no Stack Overflow).
-*/
-void clearScreen() {
-  const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
-  write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 11);
-}
-
-/*
 Função de retorno ao menu principal.
 */
 void voltarMenu(void) {
