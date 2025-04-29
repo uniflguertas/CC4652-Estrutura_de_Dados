@@ -24,4 +24,6 @@ typedef struct {
     int qtde;
 } Lista;
 
+int menuitem_cadastro(void);
+
 #endif
