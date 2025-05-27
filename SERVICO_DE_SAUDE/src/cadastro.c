@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "../include/cadastro.h"
 #include "../include/clearscreen.h"
+#include "../include/limpabuffer.h"
 
 /*
 Função de criar Lista: aloca na memória um objeto do tipo Lista.
@@ -69,7 +70,7 @@ void cadastrar(Lista *lista) {
     lista->qtde++;
 }
 
-void mostrar_paciente(Lista *lista, char rg[20]) {
+void consultar_paciente(Lista *lista, char rg[20]) {
     ELista *atual = lista->primeiro;
 
     while (atual != NULL && strcmp(atual->dados->rg, rg) != 0) {
@@ -78,7 +79,7 @@ void mostrar_paciente(Lista *lista, char rg[20]) {
 
     if (atual == NULL) {
         clearScreen();
-        printf("\n ERRO: Paciente não encontrado.\n \n");
+        printf("\n ERRO: RG inválido.\n \n");
         sleep(2);
         clearScreen();
         return;
@@ -99,6 +100,117 @@ void mostrar_paciente(Lista *lista, char rg[20]) {
     }
 }
 
+void mostrar_lista(Lista *lista) {
+    ELista *atual = lista->primeiro;
+    printf("==================================================\n");
+    printf("LISTA DE PACIENTES\n");
+    printf("==================================================\n");
+    while (atual != NULL) {
+        printf(" NOME: %s\n", atual->dados->nome);
+        printf(" DATA DE ENTRADA: %d/%d/%d\n \n", atual->dados->entrada->dia, atual->dados->entrada->mes, atual->dados->entrada->ano);
+        atual = atual->proximo;
+    };
+    printf("==================================================\n");
+    printf("\n Pressione ENTER para voltar ao menu principal. ");
+    getchar();
+    getchar();
+}
+
+void atualizar_paciente(Lista *lista, char rg[20]) {
+    int index;
+
+    ELista *atual = lista->primeiro;
+    while (atual != NULL && strcmp(atual->dados->rg, rg) != 0) {
+        atual = atual->proximo;
+    }
+
+    if (atual == NULL) {
+        clearScreen();
+        printf("\n ERRO: RG inválido \n \n");
+        sleep(2);
+        clearScreen();
+        return;
+    }
+
+    do {
+        clearScreen();
+        printf("==================================================\n");
+        printf("ATUALIZAR INFORMAÇÕES DO PACIENTE\n");
+        printf("==================================================\n");
+        printf("Digite o número da opção desejada abaixo:\n");
+        printf("1. Nome\n");
+        printf("2. RG\n");
+        printf("3. Idade\n");
+        printf("4. Data da entrada\n");
+        printf("\n \n Insira 0 para voltar ao menu.\n");
+        printf("==================================================\n");
+        printf("Digite aqui: ");
+        scanf("%d", &index);
+
+        switch (index) {
+            case 1: {
+                char novo_nome[100];
+                clearScreen();
+                printf("==================================================\n");
+                printf("ATUALIZAR INFORMAÇÕES DO PACIENTE\n");
+                printf("==================================================\n");
+                printf("1. Nome\n");
+                printf("\n Insira o novo nome: ");
+                limpar_buffer();
+                fgets(novo_nome, sizeof(novo_nome), stdin);
+                novo_nome[strcspn(novo_nome, "\n")] = 0;
+                strcpy(atual->dados->nome, novo_nome);
+                break;
+            }
+
+            case 2: {
+                char novo_rg[20];
+                clearScreen();
+                printf("==================================================\n");
+                printf("ATUALIZAR INFORMAÇÕES DO PACIENTE\n");
+                printf("==================================================\n");
+                printf("2. RG\n");
+                printf("\n Insira o novo RG: ");
+                scanf("%s", novo_rg);
+                strcpy(atual->dados->rg, novo_rg);
+                break;
+            }
+
+            case 3: {
+                int nova_idade;
+                clearScreen();
+                printf("==================================================\n");
+                printf("ATUALIZAR INFORMAÇÕES DO PACIENTE\n");
+                printf("==================================================\n");
+                printf("3. Idade\n");
+                printf("\n Insira a nova idade: ");
+                scanf("%d", &nova_idade);
+                atual->dados->idade = nova_idade;
+                break;
+            }
+
+            case 4: {
+                int novo_dia, novo_mes, novo_ano;
+                clearScreen();
+                printf("==================================================\n");
+                printf("ATUALIZAR INFORMAÇÕES DO PACIENTE\n");
+                printf("==================================================\n");
+                printf("4. Data da entrada\n");
+                printf("\n Insira a nova data(dia): ");
+                scanf("%d", &novo_dia);
+                atual->dados->entrada->dia = novo_dia;
+                printf("\n Insira a nova data(mês): ");
+                scanf("%d", &novo_mes);
+                atual->dados->entrada->mes = novo_mes;
+                printf("\n Insira a nova data(dia): ");
+                scanf("%d", &novo_ano);
+                atual->dados->entrada->ano = novo_ano;
+                break;
+            }
+        }
+    } while (index != 0);
+}
+
 int menuitem_cadastro(void) {
     int index;
     char rg[20];
@@ -114,7 +226,6 @@ int menuitem_cadastro(void) {
         printf(" 3. Consultar lista de pacientes\n");
         printf(" 4. Alterar dados de um cliente\n");
         printf(" 5. Remover cadastro de cliente\n");
-        printf(" 6. Salvar\n");
         printf("\n Insira 0 para voltar ao menu principal.\n");
         printf("================================================== \n");
         printf("Digite aqui: ");
@@ -131,21 +242,21 @@ int menuitem_cadastro(void) {
                 clearScreen();
                 printf("\n Insira o RG do paciente que deseja consultar: ");
                 scanf("%s", rg);
-                mostrar_paciente(lista, rg);
+                consultar_paciente(lista, rg);
                 clearScreen();
                 break;
             }
             case 3: {
                 clearScreen();
-                printf("\nOpção 3 selecionada.\n \n");
-                sleep(1);
+                mostrar_lista(lista);
                 clearScreen();
                 break;
             }
             case 4: {
                 clearScreen();
-                printf("\nOpção 4 selecionada.\n \n");
-                sleep(1);
+                printf("\n Insira o RG do paciente que deseja consultar: ");
+                scanf("%s", rg);
+                atualizar_paciente(lista, rg);
                 clearScreen();
                 break;
             }
@@ -156,17 +267,17 @@ int menuitem_cadastro(void) {
                 clearScreen();
                 break;
             }
-            case 6: {
-                clearScreen();
-                printf("\nOpção 6 selecionada.\n \n");
-                sleep(1);
-                clearScreen();
-                break;
-            }
             case 0: {
                 clearScreen();
                 break;
             }
+            default: {
+                clearScreen();
+                printf("\n404 - Not Found\n \n");
+                sleep(1);
+                clearScreen();
+                break;
+            }            
         }
 
     } while(index != 0);
