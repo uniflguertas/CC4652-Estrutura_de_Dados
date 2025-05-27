@@ -19,7 +19,7 @@ void voltarMenu(void) {
 main(): imprime o menu e seleciona as opções.
 */
 int main(void) {
-     // index: seletor de opção.
+ // index: seletor de opção.
     int index;
 
     clearScreen();
@@ -38,7 +38,7 @@ int main(void) {
         printf("5. Desfazer\n");
         printf("6. Carregar/Salvar\n");
         printf("7. Sobre\n");
-        printf("0. Sair\n");
+        printf("\nInsira 0 para sair.\n");
         printf("==================================================");
 
         printf("\nDigite aqui: ");

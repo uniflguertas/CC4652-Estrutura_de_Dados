@@ -1,4 +1,3 @@
-#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,6 +5,9 @@
 #include "../include/cadastro.h"
 #include "../include/clearscreen.h"
 
+/*
+Função de criar Lista: aloca na memória um objeto do tipo Lista.
+*/
 Lista *criar_lista() {
     Lista *lista = malloc(sizeof(Lista));
     lista->primeiro = NULL;
@@ -13,6 +15,9 @@ Lista *criar_lista() {
     return lista;
 }
 
+/*
+Função de criar ELista: aloca na memória um objeto do tipo ELista.
+*/
 ELista *criar_Elista(Registro *registro) {
     ELista *elista = malloc(sizeof(ELista));
     elista->proximo = NULL;
@@ -20,19 +25,20 @@ ELista *criar_Elista(Registro *registro) {
     return elista;
 }
 
+  // Função de cadastro.
 void cadastrar(Lista *lista) {
+ // Declaração de variáveis.
     char nome[100];
     char rg[20];
     int idade, dia, mes, ano;
 
     Registro *registro = malloc(sizeof(Registro));
     registro->entrada = malloc(sizeof(Data));
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
 
     clearScreen();
     getchar();
-    printf("1. CADASTRAR PACIENTE \n");
+    printf("================================================== \n");
+    printf("CADASTRAR NOVO PACIENTE \n");
     printf("================================================== \n");
     printf("Insira os dados de cadastro abaixo: \n");
     printf("\n Nome completo: ");
@@ -63,20 +69,54 @@ void cadastrar(Lista *lista) {
     lista->qtde++;
 }
 
+void mostrar_paciente(Lista *lista, char rg[20]) {
+    ELista *atual = lista->primeiro;
+
+    while (atual != NULL && strcmp(atual->dados->rg, rg) != 0) {
+        atual = atual->proximo;
+    }
+
+    if (atual == NULL) {
+        clearScreen();
+        printf("\n ERRO: Paciente não encontrado.\n \n");
+        sleep(2);
+        clearScreen();
+        return;
+
+    } else {
+        clearScreen();
+        printf("==================================================");
+        printf("\nINFORMAÇÕES DO PACIENTE\n");
+        printf("==================================================");
+        printf("\n NOME: %s", atual->dados->nome);
+        printf("\n RG: %s", atual->dados->rg);
+        printf("\n IDADE: %d", atual->dados->idade);
+        printf("\n DATA DE ENTRADA: %d/%d/%d\n", atual->dados->entrada->dia, atual->dados->entrada->mes, atual->dados->entrada->ano);
+        printf("==================================================\n");
+        printf("\n Pressione ENTER para voltar ao menu principal. ");
+        getchar();
+        getchar();
+    }
+}
+
 int menuitem_cadastro(void) {
     int index;
+    char rg[20];
+
     Lista *lista = criar_lista();
     do {
         printf("================================================== \n");
-        printf("Digite o número da opção desejada abaixo: \n");
-        printf("1. Cadastrar cliente\n");
-        printf("2. Consultar paciente\n");
-        printf("3. Consultar lista de pacientes\n");
-        printf("4. Alterar dados de um cliente\n");
-        printf("5. Remover cadastro de cliente\n");
-        printf("6. Salvar\n");
+        printf("1. CADASTRAR\n");
         printf("================================================== \n");
-        printf("Insira 0 para voltar ao menu principal.\n");
+        printf(" Digite o número da opção desejada abaixo: \n");
+        printf(" 1. Cadastrar cliente\n");
+        printf(" 2. Consultar paciente\n");
+        printf(" 3. Consultar lista de pacientes\n");
+        printf(" 4. Alterar dados de um cliente\n");
+        printf(" 5. Remover cadastro de cliente\n");
+        printf(" 6. Salvar\n");
+        printf("\n Insira 0 para voltar ao menu principal.\n");
+        printf("================================================== \n");
         printf("Digite aqui: ");
         scanf("%d", &index);
 
@@ -89,8 +129,9 @@ int menuitem_cadastro(void) {
             }
             case 2: {
                 clearScreen();
-                printf("\nOpção 2 selecionada.\n \n");
-                sleep(1);
+                printf("\n Insira o RG do paciente que deseja consultar: ");
+                scanf("%s", rg);
+                mostrar_paciente(lista, rg);
                 clearScreen();
                 break;
             }
