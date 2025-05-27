@@ -211,6 +211,42 @@ void atualizar_paciente(Lista *lista, char rg[20]) {
     } while (index != 0);
 }
 
+void remover_paciente(Lista *lista, char rg[20]) {
+    ELista *atual = lista->primeiro;
+    ELista *anterior = NULL;
+
+    while (atual != NULL && strcmp(atual->dados->rg, rg) != 0) {
+        anterior = atual;
+        atual = atual->proximo;
+    }
+    
+    if (atual == NULL) {
+        clearScreen();
+        printf("\n ERRO: RG inválido \n \n");
+        sleep(2);
+        clearScreen();
+        return;
+    }
+
+    if (anterior == NULL) {
+        lista->primeiro = atual->proximo;
+    }
+
+    else {
+        anterior->proximo = atual->proximo;
+    }
+
+    clearScreen();
+    printf("==================================================\n");
+    printf("REMOVER PACIENTE\n");
+    printf("==================================================\n");
+    printf("\n %s removido com sucesso! \n \n", atual->dados->nome);
+    sleep(2);
+    clearScreen();
+    free(atual);
+    lista->qtde--;
+}
+
 int menuitem_cadastro(void) {
     int index;
     char rg[20];
@@ -262,8 +298,9 @@ int menuitem_cadastro(void) {
             }
             case 5: {
                 clearScreen();
-                printf("\nOpção 5 selecionada.\n \n");
-                sleep(1);
+                printf("\n Insira o RG do paciente que deseja remover: ");
+                scanf("%s", rg);
+                remover_paciente(lista, rg);
                 clearScreen();
                 break;
             }
