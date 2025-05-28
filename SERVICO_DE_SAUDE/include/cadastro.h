@@ -24,6 +24,13 @@ typedef struct {
     int qtde;
 } Lista;
 
-int menuitem_cadastro(void);
-
+int menuitem_cadastro(Lista *lista);
+Lista *criar_lista();
+ELista *criar_Elista(Registro *registro);
+void cadastrar(Lista *lista);
+void consultar_paciente(Lista *lista, char rg[20]);
+void mostrar_lista(Lista *lista);
+void atualizar_paciente(Lista *lista, char rg[20]);
+void remover_paciente(Lista *lista, char rg[20]);
+void liberar_lista(Lista *lista);
 #endif

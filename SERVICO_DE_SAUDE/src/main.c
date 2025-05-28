@@ -3,7 +3,9 @@
 #include <string.h>
 #include <unistd.h>
 #include "../include/sobre.h"
+#include "../include/salvar.h"
 #include "../include/cadastro.h"
+#include "../include/atendimento.h"
 #include "../include/clearscreen.h"
 
 /*
@@ -23,6 +25,8 @@ int main(void) {
     int index;
 
     clearScreen();
+    Lista *lista = criar_lista();
+    carregar_lista(lista);
 
  // do/while(): executa o print do menu enquanto index diferente de 8.
     do {
@@ -36,7 +40,7 @@ int main(void) {
         printf("3. Atendimento Prioritário\n");
         printf("4. Pesquisa\n");
         printf("5. Desfazer\n");
-        printf("6. Carregar/Salvar\n");
+        printf("6. Salvar\n");
         printf("7. Sobre\n");
         printf("\nInsira 0 para sair.\n");
         printf("==================================================");
@@ -48,14 +52,13 @@ int main(void) {
         switch (index) {
             case 1: {
                 clearScreen();
-                menuitem_cadastro();
+                menuitem_cadastro(lista);
                 clearScreen();
                 break;
             }
             case 2: {
                 clearScreen();
-                printf("\nOpção 2 selecionada.\n \n");
-                sleep(1);
+                menuitem_atendimento();
                 clearScreen();
                 break;
             }
@@ -82,7 +85,8 @@ int main(void) {
             }
             case 6: {
                 clearScreen();
-                printf("\nOpção 6 selecionada.\n \n");
+                salvar_lista(lista);
+                printf("\n Salvando... \n \n");
                 sleep(1);
                 clearScreen();
                 break;

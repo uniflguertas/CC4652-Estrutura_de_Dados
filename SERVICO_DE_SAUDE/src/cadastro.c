@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "../include/salvar.h"
 #include "../include/cadastro.h"
 #include "../include/clearscreen.h"
 #include "../include/limpabuffer.h"
@@ -74,7 +75,7 @@ void consultar_paciente(Lista *lista, char rg[20]) {
     ELista *atual = lista->primeiro;
 
     while (atual != NULL && strcmp(atual->dados->rg, rg) != 0) {
-        atual = atual->proximo;
+        atual = atual->proximo; 
     }
 
     if (atual == NULL) {
@@ -101,15 +102,22 @@ void consultar_paciente(Lista *lista, char rg[20]) {
 }
 
 void mostrar_lista(Lista *lista) {
+    int contador = 0;
     ELista *atual = lista->primeiro;
     printf("==================================================\n");
     printf("LISTA DE PACIENTES\n");
     printf("==================================================\n");
-    while (atual != NULL) {
-        printf(" NOME: %s\n", atual->dados->nome);
-        printf(" DATA DE ENTRADA: %d/%d/%d\n \n", atual->dados->entrada->dia, atual->dados->entrada->mes, atual->dados->entrada->ano);
-        atual = atual->proximo;
+    
+    if(atual == NULL && contador == 0) {
+            printf("\n Nenhum paciente encontrado.\n \n");
+    } else {
+        while (atual != NULL) {
+            printf(" NOME: %s\n", atual->dados->nome);
+            printf(" DATA DE ENTRADA: %d/%d/%d\n \n", atual->dados->entrada->dia, atual->dados->entrada->mes, atual->dados->entrada->ano);
+            atual = atual->proximo;
+            contador++;
     };
+    }
     printf("==================================================\n");
     printf("\n Pressione ENTER para voltar ao menu principal. ");
     getchar();
@@ -247,11 +255,23 @@ void remover_paciente(Lista *lista, char rg[20]) {
     lista->qtde--;
 }
 
-int menuitem_cadastro(void) {
+void liberar_lista(Lista *lista){
+    ELista *atual = lista->primeiro;
+    while(lista->qtde > 0){
+        ELista *temp = atual;
+        ELista *atual = atual->proximo;
+        lista->qtde--;
+        free(temp->dados->entrada);
+        free(temp->dados);
+        free(temp);
+    }
+    free(lista);
+}
+
+int menuitem_cadastro(Lista *lista) {
     int index;
     char rg[20];
 
-    Lista *lista = criar_lista();
     do {
         printf("================================================== \n");
         printf("1. CADASTRAR\n");
@@ -318,5 +338,6 @@ int menuitem_cadastro(void) {
         }
 
     } while(index != 0);
+    liberar_lista(lista);
     return 0;
 }
