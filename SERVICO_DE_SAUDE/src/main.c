@@ -111,7 +111,8 @@ int main(void) {
         };
     }
     while (index != 0);
-
+    liberar_lista(lista);
+    
  // Print quando encerra o programa.
     clearScreen();
     printf("\n Encerrando... \n \n");

@@ -259,7 +259,7 @@ void liberar_lista(Lista *lista){
     ELista *atual = lista->primeiro;
     while(lista->qtde > 0){
         ELista *temp = atual;
-        ELista *atual = atual->proximo;
+        atual = atual->proximo;
         lista->qtde--;
         free(temp->dados->entrada);
         free(temp->dados);
@@ -338,6 +338,5 @@ int menuitem_cadastro(Lista *lista) {
         }
 
     } while(index != 0);
-    liberar_lista(lista);
     return 0;
 }

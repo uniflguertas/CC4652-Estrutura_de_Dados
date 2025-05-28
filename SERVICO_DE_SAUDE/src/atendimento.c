@@ -31,6 +31,8 @@ EFila *criar_Efila(Registro *registro) {
     EFila *efila = malloc(sizeof(EFila));
     efila->proximo = NULL;
     efila->dados = registro;
+
+    return efila;
 }
 
 Fila *criar_fila() {
@@ -44,6 +46,7 @@ Fila *criar_fila() {
 
 Registro* verifica_rg(char rg[20]) {
     Lista *lista = malloc(sizeof(Lista));
+    carregar_lista(lista);
 
     ELista *atual = lista->primeiro;
     while (atual != NULL && strcmp(atual->dados->rg, rg) != 0) {
@@ -59,10 +62,107 @@ Registro* verifica_rg(char rg[20]) {
     } else {
         return atual->dados;
     }
+    liberar_lista(lista);
+}
+
+int verificar_enfileiramento(Fila *fila, char rg[20]) {
+    EFila *atual = fila->head;
+
+    while(atual != NULL) {
+        if(strcmp(atual->dados->rg, rg) == 0) {
+            return 0;
+        }
+        atual = atual->proximo;
+    }
+    return 1;
 }
 
 void enfileirar(Fila *fila, char rg[20]) {
-    Registro *registro = malloc(sizeof(Registro));
+    Registro *registro = verifica_rg(rg);
+
+    if(registro != NULL && verificar_enfileiramento(fila, rg) == 1) {
+        EFila *novo = criar_Efila(registro);
+        if (fila->qtde == 0) {
+            fila->head = novo;
+        } else {
+            fila->tail->proximo = novo;
+        }
+        fila->tail = novo;
+        fila->qtde++;
+        clearScreen();
+        printf("==================================================\n");
+        printf("ENFILEIRAR PACIENTE\n");
+        printf("==================================================\n");
+        printf("\n %s enfileirado com sucesso! \n \n", novo->dados->nome);
+        sleep(2);
+        clearScreen();
+    } else {
+        clearScreen();
+        printf("\n ERRO: RG inválido ou já enfileirado.");
+        sleep(2);
+        clearScreen();
+    }
+}
+
+void desenfileirar(Fila *fila) {
+    if (fila->qtde > 0) {
+        EFila *efila = fila->head;
+        fila->head = fila->head->proximo;
+
+        if(fila->qtde == 1) {
+            fila->tail = NULL;
+        }
+        fila->qtde--;
+
+        clearScreen();
+        printf("==================================================\n");
+        printf("DESENFILEIRAR PACIENTE\n");
+        printf("==================================================\n");
+        printf("\n %s desenfileirado com sucesso! \n \n", efila->dados->nome);
+        sleep(2);
+        clearScreen();
+        free(efila->dados->entrada);
+        free(efila->dados);
+        free(efila);
+    } else {
+        clearScreen();
+        printf("\n ERRO: Não há pacientes para desenfileirar.");
+        sleep(2);
+        clearScreen();
+    }
+}
+
+void mostrar_fila(Fila *fila) {
+    EFila *atual = fila->head;
+    printf("==================================================\n");
+    printf("FILA DE PACIENTES\n");
+    printf("==================================================\n");
+    
+    while(atual != NULL) {
+        printf(" NOME: %s\n", atual->dados->nome);
+        printf(" RG: %s\n", atual->dados->rg);
+        printf(" DATA DE ENTRADA: %d/%d/%d\n \n", atual->dados->entrada->dia, atual->dados->entrada->mes, atual->dados->entrada->ano);
+        atual = atual->proximo;
+    }
+
+    printf("==================================================\n");
+    printf("\n Pressione ENTER para voltar ao menu principal. ");
+    getchar();
+    getchar();
+}
+
+void liberar_fila(Fila *fila) {
+    while (fila->qtde > 0) {  
+        EFila *temp = fila->head;
+        fila->head = fila->head->proximo;
+        if (fila->qtde == 1) {
+            fila->tail = NULL;
+        }
+        fila->qtde--;
+        free(temp->dados->entrada);
+        free(temp->dados);
+        free(temp);
+    }
 }
 
 int menuitem_atendimento(void) {
@@ -87,22 +187,23 @@ int menuitem_atendimento(void) {
         switch(index) {
             case 1: {
                 clearScreen();
-                printf("\nOpção 1 selecionada.\n \n");
-                sleep(1);
+                printf("\n Insira o RG do paciente que deseja enfileirar: ");
+                scanf("%s", rg);
+                enfileirar(fila, rg);
                 clearScreen();
                 break;
             }
             case 2: {
                 clearScreen();
-                printf("\nOpção 2 selecionada.\n \n");
-                sleep(1);
+                printf("\n Insira o RG do paciente que deseja desenfileirar: ");
+                scanf("%s", rg);
+                desenfileirar(fila);
                 clearScreen();
                 break;
             }
             case 3: {
                 clearScreen();
-                printf("\nOpção 3 selecionada.\n \n");
-                sleep(1);
+                mostrar_fila(fila);
                 clearScreen();
                 break;
             }
