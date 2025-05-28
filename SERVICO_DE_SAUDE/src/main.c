@@ -5,6 +5,7 @@
 #include "../include/sobre.h"
 #include "../include/salvar.h"
 #include "../include/cadastro.h"
+#include "../include/pesquisa.h"
 #include "../include/atendimento.h"
 #include "../include/clearscreen.h"
 #include "../include/atendimento_prioritario.h"
@@ -71,8 +72,7 @@ int main(void) {
             }
             case 4: {
                 clearScreen();
-                printf("\nOpção 4 selecionada.\n \n");
-                sleep(1);
+                menuitem_pesquisa();
                 clearScreen();
                 break;
             }
