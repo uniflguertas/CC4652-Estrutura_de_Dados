@@ -134,17 +134,21 @@ void desenfileirar(Fila *fila) {
 
 void mostrar_fila(Fila *fila) {
     EFila *atual = fila->head;
+    int contador = 0;
     printf("==================================================\n");
     printf("FILA DE PACIENTES\n");
     printf("==================================================\n");
     
-    while(atual != NULL) {
-        printf(" NOME: %s\n", atual->dados->nome);
-        printf(" RG: %s\n", atual->dados->rg);
-        printf(" DATA DE ENTRADA: %d/%d/%d\n \n", atual->dados->entrada->dia, atual->dados->entrada->mes, atual->dados->entrada->ano);
-        atual = atual->proximo;
+        if(atual == NULL && contador == 0) {
+            printf("\n Nenhum paciente encontrado.\n \n");
+    } else {
+        while(atual != NULL) {
+            printf(" NOME: %s\n", atual->dados->nome);
+            printf(" RG: %s\n", atual->dados->rg);
+            printf(" DATA DE ENTRADA: %d/%d/%d\n \n", atual->dados->entrada->dia, atual->dados->entrada->mes, atual->dados->entrada->ano);
+            atual = atual->proximo;
+        }
     }
-
     printf("==================================================\n");
     printf("\n Pressione ENTER para voltar ao menu principal. ");
     getchar();

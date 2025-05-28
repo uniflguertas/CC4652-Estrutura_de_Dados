@@ -21,5 +21,6 @@ typedef struct Celula {
 } Celula;
 
 int menuitem_atendimento(void);
+Registro* verifica_rg(char rg[20]);
 
 #endif

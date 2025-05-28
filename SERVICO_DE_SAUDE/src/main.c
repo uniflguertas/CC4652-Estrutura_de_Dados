@@ -7,6 +7,7 @@
 #include "../include/cadastro.h"
 #include "../include/atendimento.h"
 #include "../include/clearscreen.h"
+#include "../include/atendimento_prioritario.h"
 
 /*
 Função de retorno ao menu principal.
@@ -64,8 +65,7 @@ int main(void) {
             }
             case 3: {
                 clearScreen();
-                printf("\nOpção 3 selecionada.\n \n");
-                sleep(1);
+                menuitem_prioritario();
                 clearScreen();
                 break;
             }
