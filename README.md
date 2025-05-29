@@ -18,6 +18,7 @@ Este projeto em linguagem C implementa um sistema para **armazenamento, ordenaç
 - 🧼 Gerenciamento de memória dinâmica e limpeza de buffers
 
 ## 📂 Estrutura do Projeto
+```bash
 📁 include/
 ├── atendimento_prioritario.h
 ├── atendimento.h
@@ -36,7 +37,7 @@ Este projeto em linguagem C implementa um sistema para **armazenamento, ordenaç
 ├── pesquisa.c
 ├── salvar.c
 └── sobre.c
-
+```
 ## 🏗️ Como funciona
 
 1. Os dados dos pacientes são armazenados em uma lista encadeada simples.
