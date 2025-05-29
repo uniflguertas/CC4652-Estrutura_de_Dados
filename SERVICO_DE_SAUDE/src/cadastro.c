@@ -4,48 +4,44 @@
 #include <unistd.h>
 #include "../include/salvar.h"
 #include "../include/cadastro.h"
-#include "../include/clearscreen.h"
 #include "../include/limpabuffer.h"
 
-/*
-Função de criar Lista: aloca na memória um objeto do tipo Lista.
-*/
 Lista *criar_lista() {
+    // Aloca memória para a lista, inicializa ponteiro e contador
     Lista *lista = malloc(sizeof(Lista));
     lista->primeiro = NULL;
     lista->qtde = 0;
     return lista;
 }
 
-/*
-Função de criar ELista: aloca na memória um objeto do tipo ELista.
-*/
 ELista *criar_Elista(Registro *registro) {
+    // Cria um elemento da lista encadeada com os dados recebidos
     ELista *elista = malloc(sizeof(ELista));
     elista->proximo = NULL;
     elista->dados = registro;
     return elista;
 }
 
-  // Função de cadastro.
 void cadastrar(Lista *lista) {
- // Declaração de variáveis.
-    char nome[100];
-    char rg[20];
+    // Variáveis temporárias para entrada dos dados
+    char nome[100], rg[20];
     int idade, dia, mes, ano;
 
+    // Aloca registro e subestrutura data
     Registro *registro = malloc(sizeof(Registro));
     registro->entrada = malloc(sizeof(Data));
 
-    clearScreen();
-    getchar();
+    system("clear"); // Limpa a tela
+    getchar(); // Limpa buffer de entrada pendente
+
+    // Leitura dos dados do paciente
     printf("================================================== \n");
     printf("CADASTRAR NOVO PACIENTE \n");
     printf("================================================== \n");
     printf("Insira os dados de cadastro abaixo: \n");
     printf("\n Nome completo: ");
     fgets(nome, sizeof(nome), stdin);
-    nome[strcspn(nome, "\n")] = 0;
+    nome[strcspn(nome, "\n")] = 0; // Remove '\n' do fgets
     printf(" Idade: ");
     scanf("%d", &idade);
     printf(" RG: ");
@@ -56,8 +52,9 @@ void cadastrar(Lista *lista) {
     scanf("%d", &mes);
     printf(" Data de entrada (Ano): ");
     scanf("%d", &ano);
-    clearScreen();
+    system("clear");
 
+    // Copia dados para a struct registro
     strcpy(registro->nome, nome);
     registro->idade = idade;
     strcpy(registro->rg, rg);
@@ -65,6 +62,7 @@ void cadastrar(Lista *lista) {
     registro->entrada->mes = mes;
     registro->entrada->ano = ano;
 
+    // Cria elemento e insere no início da lista
     ELista *novoRegistro = criar_Elista(registro);
     novoRegistro->proximo = lista->primeiro;
     lista->primeiro = novoRegistro;
@@ -74,19 +72,19 @@ void cadastrar(Lista *lista) {
 void consultar_paciente(Lista *lista, char rg[20]) {
     ELista *atual = lista->primeiro;
 
+    // Percorre lista procurando RG correspondente
     while (atual != NULL && strcmp(atual->dados->rg, rg) != 0) {
         atual = atual->proximo; 
     }
 
-    if (atual == NULL) {
-        clearScreen();
+    if (atual == NULL) { // RG não encontrado
+        system("clear");
         printf("\n ERRO: RG inválido.\n \n");
         sleep(2);
-        clearScreen();
+        system("clear");
         return;
-
-    } else {
-        clearScreen();
+    } else { // Exibe dados do paciente
+        system("clear");
         printf("==================================================");
         printf("\nINFORMAÇÕES DO PACIENTE\n");
         printf("==================================================");
@@ -104,19 +102,23 @@ void consultar_paciente(Lista *lista, char rg[20]) {
 void mostrar_lista(Lista *lista) {
     int contador = 0;
     ELista *atual = lista->primeiro;
+
+    // Exibe cabeçalho da lista
     printf("==================================================\n");
     printf("LISTA DE PACIENTES\n");
     printf("==================================================\n");
-    
+
+    // Se lista vazia, avisa
     if(atual == NULL && contador == 0) {
-            printf("\n Nenhum paciente encontrado.\n \n");
+        printf("\n Nenhum paciente encontrado.\n \n");
     } else {
+        // Percorre e imprime os dados dos pacientes
         while (atual != NULL) {
             printf(" NOME: %s\n", atual->dados->nome);
             printf(" DATA DE ENTRADA: %d/%d/%d\n \n", atual->dados->entrada->dia, atual->dados->entrada->mes, atual->dados->entrada->ano);
             atual = atual->proximo;
             contador++;
-    };
+        };
     }
     printf("==================================================\n");
     printf("\n Pressione ENTER para voltar ao menu principal. ");
@@ -126,22 +128,25 @@ void mostrar_lista(Lista *lista) {
 
 void atualizar_paciente(Lista *lista, char rg[20]) {
     int index;
-
     ELista *atual = lista->primeiro;
+
+    // Busca paciente pelo RG
     while (atual != NULL && strcmp(atual->dados->rg, rg) != 0) {
         atual = atual->proximo;
     }
 
-    if (atual == NULL) {
-        clearScreen();
+    if (atual == NULL) { // RG inválido
+        system("clear");
         printf("\n ERRO: RG inválido \n \n");
         sleep(2);
-        clearScreen();
+        system("clear");
         return;
     }
 
     do {
-        clearScreen();
+        system("clear");
+
+        // Menu de atualização das informações do paciente
         printf("==================================================\n");
         printf("ATUALIZAR INFORMAÇÕES DO PACIENTE\n");
         printf("==================================================\n");
@@ -157,8 +162,9 @@ void atualizar_paciente(Lista *lista, char rg[20]) {
 
         switch (index) {
             case 1: {
+                // Atualiza nome
                 char novo_nome[100];
-                clearScreen();
+                system("clear");
                 printf("==================================================\n");
                 printf("ATUALIZAR INFORMAÇÕES DO PACIENTE\n");
                 printf("==================================================\n");
@@ -172,8 +178,9 @@ void atualizar_paciente(Lista *lista, char rg[20]) {
             }
 
             case 2: {
+                // Atualiza RG
                 char novo_rg[20];
-                clearScreen();
+                system("clear");
                 printf("==================================================\n");
                 printf("ATUALIZAR INFORMAÇÕES DO PACIENTE\n");
                 printf("==================================================\n");
@@ -185,8 +192,9 @@ void atualizar_paciente(Lista *lista, char rg[20]) {
             }
 
             case 3: {
+                // Atualiza idade
                 int nova_idade;
-                clearScreen();
+                system("clear");
                 printf("==================================================\n");
                 printf("ATUALIZAR INFORMAÇÕES DO PACIENTE\n");
                 printf("==================================================\n");
@@ -198,8 +206,9 @@ void atualizar_paciente(Lista *lista, char rg[20]) {
             }
 
             case 4: {
+                // Atualiza data de entrada
                 int novo_dia, novo_mes, novo_ano;
-                clearScreen();
+                system("clear");
                 printf("==================================================\n");
                 printf("ATUALIZAR INFORMAÇÕES DO PACIENTE\n");
                 printf("==================================================\n");
@@ -210,53 +219,57 @@ void atualizar_paciente(Lista *lista, char rg[20]) {
                 printf("\n Insira a nova data(mês): ");
                 scanf("%d", &novo_mes);
                 atual->dados->entrada->mes = novo_mes;
-                printf("\n Insira a nova data(dia): ");
+                printf("\n Insira a nova data(ano): ");
                 scanf("%d", &novo_ano);
                 atual->dados->entrada->ano = novo_ano;
                 break;
             }
         }
-    } while (index != 0);
+    } while (index != 0); // Continua até o usuário escolher voltar
 }
 
 void remover_paciente(Lista *lista, char rg[20]) {
     ELista *atual = lista->primeiro;
     ELista *anterior = NULL;
 
+    // Busca elemento com o RG especificado
     while (atual != NULL && strcmp(atual->dados->rg, rg) != 0) {
         anterior = atual;
         atual = atual->proximo;
     }
-    
-    if (atual == NULL) {
-        clearScreen();
+
+    if (atual == NULL) { // RG não encontrado
+        system("clear");
         printf("\n ERRO: RG inválido \n \n");
         sleep(2);
-        clearScreen();
+        system("clear");
         return;
     }
 
+    // Remove da lista ajustando ponteiros
     if (anterior == NULL) {
-        lista->primeiro = atual->proximo;
-    }
-
-    else {
+        lista->primeiro = atual->proximo; // Se for o primeiro da lista
+    } else {
         anterior->proximo = atual->proximo;
     }
 
-    clearScreen();
+    system("clear");
     printf("==================================================\n");
     printf("REMOVER PACIENTE\n");
     printf("==================================================\n");
     printf("\n %s removido com sucesso! \n \n", atual->dados->nome);
     sleep(2);
-    clearScreen();
+    system("clear");
+
+    // Libera memória e decrementa contador
     free(atual);
     lista->qtde--;
 }
 
 void liberar_lista(Lista *lista){
     ELista *atual = lista->primeiro;
+
+    // Percorre toda lista liberando memória de cada nó e seus dados
     while(lista->qtde > 0){
         ELista *temp = atual;
         atual = atual->proximo;
@@ -265,7 +278,7 @@ void liberar_lista(Lista *lista){
         free(temp->dados);
         free(temp);
     }
-    free(lista);
+    free(lista); // Libera a estrutura da lista
 }
 
 int menuitem_cadastro(Lista *lista) {
@@ -273,6 +286,7 @@ int menuitem_cadastro(Lista *lista) {
     char rg[20];
 
     do {
+        // Exibe menu principal para cadastro/consulta/atualização/remover
         printf("================================================== \n");
         printf("1. CADASTRAR\n");
         printf("================================================== \n");
@@ -288,55 +302,48 @@ int menuitem_cadastro(Lista *lista) {
         scanf("%d", &index);
 
         switch(index) {
-            case 1: {
-                clearScreen();
+            case 1: // Chama função cadastrar
+                system("clear");
                 cadastrar(lista);
-                clearScreen();
+                system("clear");
                 break;
-            }
-            case 2: {
-                clearScreen();
+            case 2: // Consulta paciente por RG
+                system("clear");
                 printf("\n Insira o RG do paciente que deseja consultar: ");
                 scanf("%s", rg);
                 consultar_paciente(lista, rg);
-                clearScreen();
+                system("clear");
                 break;
-            }
-            case 3: {
-                clearScreen();
+            case 3: // Mostra lista completa
+                system("clear");
                 mostrar_lista(lista);
-                clearScreen();
+                system("clear");
                 break;
-            }
-            case 4: {
-                clearScreen();
+            case 4: // Atualiza dados do paciente
+                system("clear");
                 printf("\n Insira o RG do paciente que deseja consultar: ");
                 scanf("%s", rg);
                 atualizar_paciente(lista, rg);
-                clearScreen();
+                system("clear");
                 break;
-            }
-            case 5: {
-                clearScreen();
+            case 5: // Remove paciente da lista
+                system("clear");
                 printf("\n Insira o RG do paciente que deseja remover: ");
                 scanf("%s", rg);
                 remover_paciente(lista, rg);
-                clearScreen();
+                system("clear");
                 break;
-            }
-            case 0: {
-                clearScreen();
+            case 0: // Sai do menu
+                system("clear");
                 break;
-            }
-            default: {
-                clearScreen();
+            default: // Opção inválida
+                system("clear");
                 printf("\n404 - Not Found\n \n");
                 sleep(1);
-                clearScreen();
+                system("clear");
                 break;
-            }            
         }
 
-    } while(index != 0);
+    } while(index != 0); // Repetição do menu até usuário escolher sair
     return 0;
 }

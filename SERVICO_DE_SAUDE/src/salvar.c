@@ -3,7 +3,6 @@
 #include <string.h>
 #include <unistd.h>
 #include "../include/cadastro.h"
-#include "../include/clearscreen.h"
 #include "../include/limpabuffer.h"
 
 int salvar_lista(Lista *lista) {

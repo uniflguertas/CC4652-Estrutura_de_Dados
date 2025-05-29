@@ -7,36 +7,31 @@
 #include "../include/cadastro.h"
 #include "../include/pesquisa.h"
 #include "../include/atendimento.h"
-#include "../include/clearscreen.h"
 #include "../include/atendimento_prioritario.h"
 
-/*
-Função de retorno ao menu principal.
-*/
+// Aguarda o usuário pressionar ENTER para retornar ao menu principal
 void voltarMenu(void) {
     printf("\n Pressione ENTER para voltar ao menu principal. ");
     getchar();
     getchar();
 }
 
-/*
-main(): imprime o menu e seleciona as opções.
-*/
 int main(void) {
- // index: seletor de opção.
-    int index;
+    int index; // Variável para armazenar a opção do menu escolhida pelo usuário
 
-    clearScreen();
-    Lista *lista = criar_lista();
-    carregar_lista(lista);
+    system("clear"); // Limpa o terminal
 
- // do/while(): executa o print do menu enquanto index diferente de 8.
+    Lista *lista = criar_lista();           // Cria a lista de pacientes
+    carregar_lista(lista);                  // Carrega os dados salvos da lista
+    Fila *fila = criar_fila();              // Cria a fila de atendimento
+    Stack *stack = criar_stack();           // Cria a pilha para operações de desfazer
+
     do {
+        // Exibe o menu principal
         printf("Seja bem-vindo ao Serviço de Atendimento de Saúde. \n");
         printf("O que gostaria de fazer hoje? \n");    
         printf("================================================== \n");
-        printf("Digite o número da opção desejada abaixo: \n");
-        printf("\n");
+        printf("Digite o número da opção desejada abaixo: \n\n");
         printf("1. Cadastrar\n");
         printf("2. Atendimento\n");
         printf("3. Atendimento Prioritário\n");
@@ -46,78 +41,93 @@ int main(void) {
         printf("7. Sobre\n");
         printf("\nInsira 0 para sair.\n");
         printf("==================================================");
-
         printf("\nDigite aqui: ");
         scanf("%d", &index);
 
-     // switch(): seleção de opção.
+        // Trata a opção escolhida
         switch (index) {
             case 1: {
-                clearScreen();
-                menuitem_cadastro(lista);
-                clearScreen();
+                system("clear");
+                menuitem_cadastro(lista); // Abre submenu de cadastro
+                system("clear");
                 break;
             }
             case 2: {
-                clearScreen();
-                menuitem_atendimento();
-                clearScreen();
+                system("clear");
+                menuitem_atendimento(fila, stack); // Submenu de atendimento comum
+                system("clear");
                 break;
             }
             case 3: {
-                clearScreen();
-                menuitem_prioritario();
-                clearScreen();
+                system("clear");
+                menuitem_prioritario(); // Atendimento com prioridade (por idade)
+                system("clear");
                 break;
             }
             case 4: {
-                clearScreen();
-                menuitem_pesquisa();
-                clearScreen();
+                system("clear");
+                menuitem_pesquisa(); // Submenu de busca por informações
+                system("clear");
                 break;
             }
             case 5: {
-                clearScreen();
-                printf("\nOpção 5 selecionada.\n \n");
-                sleep(1);
-                clearScreen();
+                system("clear");
+                int escolha;
+                char *mensagem = mostrar_pop(stack); // Mostra a ação que pode ser desfeita
+                printf("\nVocê deseja desfazer a ação abaixo?\n");
+                printf("%s \n", mensagem);
+                free(mensagem); // Libera memória da mensagem
+
+                printf("Insira 1 para CONFIRMAR \n(Quaisquer outros valores serão tratados como NÃO)\n");
+                printf("\nDigite aqui: ");
+                scanf("%d", &escolha);
+
+                switch(escolha) {
+                    case 1: {
+                        pop(stack, fila); // Desfaz a última ação realizada
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+                system("clear");
                 break;
             }
             case 6: {
-                clearScreen();
-                salvar_lista(lista);
+                system("clear");
+                salvar_lista(lista); // Salva os dados da lista em arquivo
                 printf("\n Salvando... \n \n");
                 sleep(1);
-                clearScreen();
+                system("clear");
                 break;
             }
             case 7: {
-                clearScreen();
-                sobre();
-                voltarMenu();
-                clearScreen();
+                system("clear");
+                sobre();        // Mostra informações sobre o sistema
+                voltarMenu();   // Aguarda o ENTER para voltar ao menu
+                system("clear");
                 break;
             }
             case 0: {
-                break;
+                break; // Sai do programa
             }
             default: {
-                clearScreen();
-                printf("\n404 - Not Found\n \n");
+                system("clear");
+                printf("\n404 - Not Found\n \n"); // Opção inválida
                 sleep(1);
-                clearScreen();
+                system("clear");
                 break;
             }
         };
-    }
-    while (index != 0);
-    liberar_lista(lista);
-    
- // Print quando encerra o programa.
-    clearScreen();
-    printf("\n Encerrando... \n \n");
+    } while (index != 0); // Continua exibindo o menu até que o usuário escolha sair
+
+    liberar_lista(lista); // Libera memória usada pela lista
+
+    system("clear");
+    printf("\n Encerrando... \n \n"); // Mensagem final de saída
     sleep(1);
-    clearScreen();
-    
+    system("clear");
+
     return 0;
 }
